@@ -53,18 +53,18 @@ liberror.$(LIBEXT): $(LOBJ)
 install: liberror.a liberror.$(LIBEXT)
 	mkdir -p -- "$(DESTDIR)$(PREFIX)/lib"
 	mkdir -p -- "$(DESTDIR)$(PREFIX)/include"
-	mkdir -p -- "$(DESTDIR)$(PREFIX)/licenses/liberror"
+	mkdir -p -- "$(DESTDIR)$(PREFIX)/share/licenses/liberror"
 	cp -- liberror.a "$(DESTDIR)$(PREFIX)/lib"
 	cp -- liberror.$(LIBEXT) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBMINOREXT)"
 	ln -sf -- liberror.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBMAJOREXT)"
 	ln -sf -- liberror.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBEXT)"
 	cp -- liberror.h "$(DESTDIR)$(PREFIX)/include"
-	cp -- LICENSE "$(DESTDIR)$(PREFIX)/licenses/liberror"
+	cp -- LICENSE "$(DESTDIR)$(PREFIX)/share/licenses/liberror"
 
 uninstall:
 	-rm -f -- "$(DESTDIR)$(PREFIX)/lib/liberror."*
 	-rm -f -- "$(DESTDIR)$(PREFIX)/include/liberror.h"
-	-rm -rf -- "$(DESTDIR)$(PREFIX)/licenses/liberror"
+	-rm -rf -- "$(DESTDIR)$(PREFIX)/share/licenses/liberror"
 
 clean:
 	-rm -f -- *.o *.lo *.a *.so *.so.* *.su *.test
