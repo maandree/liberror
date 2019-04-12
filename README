@@ -1,7 +1,7 @@
 A library that provides a single interface for error handling.
 Specifically this is intended for cases where some errors are
-errno errors or other libc errors and there are library
-specific, maybe multiple library, errors.
+errno errors or other libc errors and there are library-specific,
+maybe for multiple libraries, errors.
 
 The errors are thread-local, support error description, error
 source string (which function failed), and error code with
