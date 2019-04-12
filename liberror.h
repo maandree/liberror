@@ -180,6 +180,24 @@ void liberror_reset_error(void);
 void liberror_print_backtrace(struct liberror_error *, FILE *, const char *);
 
 /**
+ * Get backtrace and save backtrace
+ * 
+ * This function will never change `errno`
+ * 
+ * Note: this library does not actually save
+ * a backtrace, `-lerror-backtrace` is needed
+ * for that functionallity (it will replace
+ * some things in this library, so no other
+ * action is required)
+ * 
+ * @param   error  The error the backtrace shall be stored in,
+ *                 if `NULL`, the backtrafe is saved for the
+ *                 next error in the thread
+ * @return         0 on success, -1 on failure
+ */
+int liberror_save_backtrace(struct liberror_error *);
+
+/**
  * Set the current error for the thread
  * 
  * If the thread already has an error saved,

@@ -29,6 +29,4 @@ struct liberror_backtrace {
 
 HIDDEN extern _Thread_local struct liberror_error liberror_error_;
 HIDDEN extern _Thread_local int liberror_have_error_;
-
-
-int liberror_save_backtrace(struct liberror_error *);
+extern _Thread_local struct liberror_backtrace *liberror_saved_backtrace;

@@ -4,3 +4,4 @@
 
 _Thread_local struct liberror_error liberror_error_;
 _Thread_local int liberror_have_error_;
+_Thread_local struct liberror_backtrace *liberror_saved_backtrace;
