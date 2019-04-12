@@ -33,7 +33,7 @@ liberror_set_error(const char description[256], const char source[64], const cha
 	stpcpy(error->source, source);
 	stpcpy(error->code_group, code_group);
 	error->code = code;
-	liberror_save_backtrace_(error);
+	liberror_save_backtrace(error);
 	error->cause = cause;
 	error->failed_to_allocate_cause = have_cause && !cause;
 }
