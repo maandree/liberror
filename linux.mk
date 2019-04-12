@@ -1,5 +1,5 @@
 LIBEXT = so
-LIBFLAGS = -shared -Wl,-soname,libkeccak.$(LIBEXT).$(LIB_MAJOR)
+LIBFLAGS = -shared -Wl,-soname,liberror.$(LIBEXT).$(LIB_MAJOR)
 
 LIBMAJOREXT = $(LIBEXT).$(LIB_MAJOR)
 LIBMINOREXT = $(LIBEXT).$(LIB_VERSION)
