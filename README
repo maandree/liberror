@@ -1,0 +1,33 @@
+A library that provides a single interface for error handling.
+Specifically this is intended for cases where some errors are
+errno errors or other libc errors and there are library
+specific, maybe multiple library, errors.
+
+The errors are thread-local, support error description, error
+source string (which function failed), and error code with
+error code group (e.g. "errno", "addrinfo" or a library name),
+as well as cause chains, and if linked together with
+liberror-backtrace, backtraces.
+
+
+The important functions are:
+
+	liberror_get_error
+		Get error for the calling thread
+
+	liberror_set_error
+		Set error for the calling thread
+
+	liberror_set_error_errno
+		Wrapper for liberror_set_error for errno errors
+
+	liberror_reset_error
+		Remove error for the calling thread, needed
+		because `liberror_set_error` otherwise stores
+		the error as the cause of the new error
+
+	liberror_print_error
+		Print the error for the calling thread, include
+		its backtrace if liberror-backtrace is also
+		linked, the errors cause, and optionally remove
+		the error for the calling thread.
