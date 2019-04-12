@@ -5,13 +5,19 @@
 void
 liberror_set_error(const char description[256], const char source[64], const char code_group[64], long long int code)
 {
-	struct liberror_error *cause;
+	struct liberror_error *cause = NULL, *old;
 	struct liberror_error *error;
-	int have_cause;
+	int have_cause = 0, saved_errno;
 
-	cause = liberror_get_error();
-	have_cause = !!cause;
-	cause = liberror_copy_error(cause);
+	old = liberror_get_error();
+	if (old) {
+		have_cause = 1;
+		saved_errno = errno;
+		cause = malloc(sizeof(*cause));
+		errno = saved_errno;
+		if (cause)
+			memcpy(cause, old, sizeof(*cause));
+	}
 
 	error = &liberror_error_;
 	liberror_have_error_ = 1;
