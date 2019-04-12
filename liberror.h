@@ -13,6 +13,53 @@
 struct liberror_backtrace;
 
 /**
+ * Value that specifies which feild in a
+ * `union liberror_details` that is used
+ */
+enum liberror_details_type {
+	LIBERROR_DETAILS_NONE,
+	LIBERROR_DETAILS_USER,
+	LIBERROR_DETAILS_ONE_FILE,
+	LIBERROR_DETAILS_TWO_FILES
+};
+
+/**
+ * Error details
+ */
+union liberror_details {
+	/**
+	 * For `LIBERROR_DETAILS_USER`
+	 */
+	struct {
+		const char *library;
+		void *data;
+		void (*free_data)(void *);
+		void *(*copy_data)(void *);
+	} user;
+
+	/**
+	 * For `LIBERROR_DETAILS_ONE_FILE`
+	 */
+	struct {
+		int fd;
+		char *name;
+		const char *role;
+	} one_file;
+
+	/**
+	 * For `LIBERROR_DETAILS_TWO_FILES`
+	 */
+	struct {
+		int fd1;
+		int fd2;
+		char *name1;
+		char *name2;
+		const char *role1;
+		const char *role2;
+	} two_files;
+};
+
+/**
  * Error structure
  */
 struct liberror_error {
@@ -63,6 +110,16 @@ struct liberror_error {
 	 * Whether the error is physically allocated
 	 */
 	int dynamically_allocated;
+
+	/**
+	 * Which value in `.details` that is used
+	 */
+	enum liberror_details_type details_type;
+
+	/**
+	 * Error detail
+	 */
+	union liberror_details details;
 };
 
 

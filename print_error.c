@@ -3,7 +3,7 @@
 
 
 static void
-print_error_description(struct liberror_error *error, FILE *fp, const char *prefix)
+print_error(struct liberror_error *error, FILE *fp, char *prefix)
 {
 	if (*error->description) {
 		if (*error->source)
@@ -15,6 +15,54 @@ print_error_description(struct liberror_error *error, FILE *fp, const char *pref
 	} else {
 		fprintf(fp, "%sError: %s error %lli\n", prefix, error->code_group, error->code);
 	}
+
+	*strchr(prefix, '\0') = ' ';
+
+	switch (error->details_type) {
+	case LIBERROR_DETAILS_ONE_FILE:
+		if (error->details.one_file.fd >= 0 || error->details.one_file.name) {
+			fprintf(fp, "%sDetails:\n", prefix);
+			if (error->details.one_file.name) {
+				fprintf(fp, "%s  %s name: %s\n", prefix,
+				        error->details.one_file.role, error->details.one_file.name);
+			}
+			if (error->details.one_file.fd >= 0) {
+				fprintf(fp, "%s  %s descriptor: %i\n", prefix,
+				        error->details.one_file.role, error->details.one_file.fd);
+			}
+		}
+		break;
+
+	case LIBERROR_DETAILS_TWO_FILES:
+		if (error->details.two_files.fd1 >= 0 || error->details.two_files.name1 ||
+		    error->details.two_files.fd2 >= 0 || error->details.two_files.name2) {
+			fprintf(fp, "%sDetails:\n", prefix);
+			if (error->details.two_files.fd1 >= 0) {
+				fprintf(fp, "%s  %s descriptor: %i\n", prefix,
+				        error->details.two_files.role1, error->details.two_files.fd1);
+			}
+			if (error->details.two_files.name1) {
+				fprintf(fp, "%s  %s name: %s\n", prefix,
+				        error->details.two_files.role1, error->details.two_files.name1);
+			}
+			if (error->details.two_files.fd2 >= 0) {
+				fprintf(fp, "%s  %s descriptor: %i\n", prefix,
+				        error->details.two_files.role2, error->details.two_files.fd2);
+			}
+			if (error->details.two_files.name2) {
+				fprintf(fp, "%s  %s name: %s\n", prefix,
+				        error->details.two_files.role2, error->details.two_files.name2);
+			}
+		}
+		break;
+
+	case LIBERROR_DETAILS_NONE:
+	case LIBERROR_DETAILS_USER:
+	default:
+		break;
+	}
+
+	liberror_print_backtrace(error, fp, prefix);
 }
 
 
@@ -43,20 +91,13 @@ liberror_print_error(struct liberror_error *error, FILE *fp, int reset, const ch
 		fp = stderr;
 
 	*p = *q = '\0';
-	print_error_description(err, fp, prefix);
-
-	*p = ' ';
-	liberror_print_backtrace(err, fp, prefix);
+	print_error(err, fp, prefix);
 
 	while ((err = err->cause)) {
 		*p = *q = '\0';
 		fprintf(fp, "%sCaused by:\n", prefix);
-
 		*p = ' ';
-		print_error_description(err, fp, prefix);
-		
-		*q = ' ';
-		liberror_print_backtrace(err, fp, prefix);
+		print_error(err, fp, prefix);
 	}
 
 	if (reset) {

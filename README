@@ -6,8 +6,8 @@ specific, maybe multiple library, errors.
 The errors are thread-local, support error description, error
 source string (which function failed), and error code with
 error code group (e.g. "errno", "addrinfo" or a library name),
-as well as cause chains, and if linked together with
-liberror-backtrace, backtraces.
+as well as cause chains, extended details, and if linked
+together with liberror-backtrace, backtraces.
 
 
 The important functions are:
