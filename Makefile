@@ -29,6 +29,17 @@ OBJ =\
 	set_error.o\
 	set_error_errno.o
 
+MAN3 =\
+	liberror_copy_error.3\
+	liberror_free_error.3\
+	liberror_get_error.3\
+	liberror_print_bactrace.3\
+	liberror_print_error.3\
+	liberror_reset_error.3\
+	liberror_save_backtrace.3\
+	liberror_set_error.3\
+	liberror_set_error_errno.3
+
 LOBJ = $(OBJ:.o=.lo)
 
 

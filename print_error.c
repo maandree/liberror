@@ -19,6 +19,11 @@ print_error(struct liberror_error *error, FILE *fp, char *prefix)
 	*strchr(prefix, '\0') = ' ';
 
 	switch (error->details_type) {
+	case LIBERROR_DETAILS_USER:
+		if (error->details.user.print_data)
+			error->details.user.print_data(error->details.user.data, fp, prefix);
+		break;
+
 	case LIBERROR_DETAILS_ONE_FILE:
 		if (error->details.one_file.fd >= 0 || error->details.one_file.name) {
 			fprintf(fp, "%sDetails:\n", prefix);
@@ -57,7 +62,6 @@ print_error(struct liberror_error *error, FILE *fp, char *prefix)
 		break;
 
 	case LIBERROR_DETAILS_NONE:
-	case LIBERROR_DETAILS_USER:
 	default:
 		break;
 	}

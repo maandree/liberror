@@ -1,0 +1,56 @@
+.TH LIBERROR_COPY_ERROR 3 2019-04-13 liberror
+.SH NAME
+liberror_copy_error \- create a copy of an error
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+struct liberror_error *liberror_copy_error(struct liberror_error *\fIerror\fP);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_copy_error ()
+function creates a copy of if the error specified in the
+.I error
+parameter.
+.PP
+The returned error shall be deallocated with the
+.BR liberror_free_error (3)
+function.
+.SH RETURN VALUE
+The
+.BR liberror_copy_error ()
+returns a copy of
+.I error
+upon successful completion, or
+.I NULL
+on failure, without changing
+.IR errno .
+.SH ERRORS
+This function can only fail of enough memory cannot be
+allocated, however the function never change
+.IR errno .
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3)

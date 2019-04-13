@@ -1,0 +1,50 @@
+.TH LIBERROR_RESET_ERROR 3 2019-04-13 liberror
+.SH NAME
+liberror_reset_error \- remove the error currently assigned to the thread
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+void liberror_reset_error(void);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_reset_error ()
+function recursivelt deallocates the thread's
+currently assigned error, if any, and marks
+that the thread does not currently have any
+error assigned to it.
+.PP
+It is important to call this function after
+an error has been handles, or ignored, otherwise
+the error currently assigned to the thread will
+be marked as the cause of the next error assigned
+to the thread.
+.SH RETURN VALUE
+None.
+.SH ERRORS
+None.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3)

@@ -1,0 +1,55 @@
+.TH LIBERROR_GET_ERROR 3 2019-04-13 liberror
+.SH NAME
+liberror_get_error \- get the current error for the thread
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+struct liberror_error *liberror_get_error(void);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_get_error ()
+function returns a pointer to the threads current
+error. If the thread does not have an error assigned,
+.I NULL
+is returned.
+.PP
+After handling the error, call the
+.BR liberror_reset_error (3)
+function.
+.SH RETURN VALUE
+The
+.BR liberror_get_error ()
+returns the error assigned to the thread, or
+.I NULL
+if none is assigned to the threa. Failure is impossible.
+.PP
+Note, this contents of this error will change when a new
+error is assigned to the thread.
+.SH ERRORS
+None.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3)

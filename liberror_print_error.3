@@ -1,0 +1,90 @@
+.TH LIBERROR_PRINT_ERROR 3 2019-04-13 liberror
+.SH NAME
+liberror_print_error \- print an error
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+int liberror_print_error(struct liberror_error *\fIerror\fP, FILE *\fIfp\fP, int \fIreset\fP, const char *\fIprefix\fP);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_print_error ()
+function prints the error, including available details, backtrace,
+and cause recursively, specified in the
+.I error
+parameter, or the error currently assigned to the thread if
+.I error
+is
+.IR NULL ,
+to
+.IR fp ,
+or to the standard error if
+.I fp
+is
+.IR NULL .
+Unless
+.I prefix
+is
+.I NULL
+or the empty string, each printed line will becoming with with
+.I prefix
+followed by a space and a colon. Under normal usage,
+.I prefix
+shall be
+.I argv[0]
+from the
+.BR main ()
+function.
+.PP
+If
+.I reset
+is non-zero,
+.I error
+will be deallocated with the
+.BR liberror_free_error (3)
+function, or if
+.I error
+is
+.IR NULL ,
+with the
+.BR liberror_reset_error (3)
+function, which marks that the thread does not have any error
+assigned to it. Thus, if
+.I error
+is
+.I NULL
+and
+.I reset
+is non-zero, there is no need to call the
+.BR liberror_reset_error (3)
+function.
+.SH RETURN VALUE
+None.
+.SH ERRORS
+.I errno
+will never be changed.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3)

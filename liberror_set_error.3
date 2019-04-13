@@ -1,0 +1,102 @@
+.TH LIBERROR_SET_ERROR 3 2019-04-13 liberror
+.SH NAME
+liberror_set_error \- set the current error for the thread
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+void liberror_set_error(const char \fIdescription\fP[256], const char \fIsource\fP[64], const char \fIcode_group\fP[64], long long int \fIcode\fP);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_set_error ()
+function assigns a new error to the thread. If the
+thread already has an error assigned to it, that
+error will be copied and stored as the cause of the
+new error. If the process cannot allocate enough
+memory to copy the error (which is statically allocated),
+the
+.I cause
+field in the new error will be set to
+.I NULL
+and the
+.I failed_to_allocate_cause
+field will be set to 1.
+.PP
+The
+.I description
+parameter shall be a single line description of the
+error, or the empty string; it must not be
+.IR NULL .
+If the empty string is specified, the value of
+.I code_group
+and
+.I code
+parameters will be printed when the error is printed
+by the
+.I liberror_print_error
+is called, however, if the value of the
+.I code_group
+parameter is recognised, the error string for the
+.I code
+error will be used.
+.PP
+The
+.I source
+parameter shall be the name of the function that
+failed, or the empty string; it must not be
+.IR NULL .
+.PP
+The
+.I code
+parameter shall be the error number that describes
+the error. The
+.I code_group
+shall be a non-empty string (and must not be
+.IR NULL )
+that specifies the what error number group is used
+for the error code. For values assigned to
+.IR errno ,
+.I code_group
+shall be
+.B \(dqerrno\(dq
+and for errors returned by the
+.BR getaddrinfo (3)
+function,
+.I code_group
+shall be
+.BR \(dqerrno\(dq .
+In other cases, the value of
+.I code_group
+shall be the name of the library or application.
+.SH RETURN VALUE
+None.
+.SH ERRORS
+Errors will be marked in the new error.
+.I errno
+will never be changed. Failure to create the error is
+impossible.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error_errno (3)

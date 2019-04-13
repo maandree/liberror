@@ -35,6 +35,7 @@ union liberror_details {
 		void *data;
 		void (*free_data)(void *);
 		void *(*copy_data)(void *);
+		void (*print_data)(void *, FILE *, const char *);
 	} user;
 
 	/**

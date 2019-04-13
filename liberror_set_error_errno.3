@@ -1,0 +1,48 @@
+.TH LIBERROR_SET_ERROR_ERRNO 3 2019-04-13 liberror
+.SH NAME
+liberror_set_error_errno \- set the current error for the thread
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+void liberror_set_error_errno(const char \fIdescription\fP[256], const char \fIsource\fP[64], int \fIcode\fP);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_set_error_errno ()
+function is equivalent to calling
+.nf
+
+	liberror_set_error(description, source, \(dqerrno\(dq, (long long int)code)
+.fi
+.SH RETURN VALUE
+None.
+.SH ERRORS
+Errors will be marked in the new error.
+.I errno
+will never be changed. Failure to create the error is
+impossible.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3)

@@ -1,0 +1,69 @@
+.TH LIBERROR_SAVE_BACKTRACE 3 2019-04-13 liberror
+.SH NAME
+liberror_save_backtrace \- fetch backtrace and assign it to an error
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+int liberror_save_backtrace(struct liberror_error *\fIerror\fP);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_save_backtrace ()
+function fetches the backtrace for the call to the function
+and stores it in
+.IR error ,
+deallocating any already assigned backtrace. If
+.I error
+is
+.IR NULL ,
+the backtrace will assigned to the next error that is
+assigned to the thread. The
+.IR liberror_set_error (3)
+function calls this function, so there is no need for the
+user to call this function, however, calling this function
+before or after (preferably before for better performance)
+call the
+.IR liberror_set_error (3)
+function or any helper function that calls the
+.IR liberror_set_error (3)
+function will produce a cleaner backtrace.
+.PP
+.B liberror
+only implements a no-operation function that returns 0,
+the actual implementation is implemented in the
+.BR liberror-backtrace (7)
+library.
+.SH RETURN VALUE
+The
+.BR liberror_save_backtrace ()
+function returns 0 upon successful completion,
+on failure -1 is returned without changing
+.IR errno .
+.SH ERRORS
+.I errno
+will never be changed.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3)
