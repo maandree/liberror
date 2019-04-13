@@ -218,6 +218,31 @@ struct liberror_error {
 	union liberror_details details;
 };
 
+/**
+ * Saved error state for a thread
+ */
+struct liberror_state {
+	/**
+	 * The backtrace for the next error
+	 */
+	struct liberror_backtrace *backtrace;
+
+	/**
+	 * The thread's error
+	 */
+	struct liberror_error error;
+
+	/**
+	 * Whether the thread hade an error
+	 */
+	int have_error;
+
+	/**
+	 * The thread's value of `errno`
+	 */
+	int errnum;
+};
+
 
 /**
  * Get the current error for the thread
@@ -345,6 +370,30 @@ void liberror_set_error_errno(const char[256], const char[64], int);
  *                 `argv[0]` from the main() function
  */
 void liberror_print_error(struct liberror_error *, FILE *, int, const char *);
+
+/**
+ * Save the thread's liberror error, pending backtrace,
+ * and `errno`, and then reset the error information
+ * for the thread
+ * 
+ * Asynchronously called functions such as signal handlers
+ * should call this function the first thing they do
+ * 
+ * @param  state  Output parameter for the error state
+ */
+void liberror_start(struct liberror_state *);
+
+/**
+ * Restore the thread's liberror error, pending backtrace,
+ * and `errno`
+ * 
+ * Asynchronously called functions such as signal handlers
+ * should call this function the last thing they do before
+ * returning
+ * 
+ * @param  state  The saved error state to restore
+ */
+void liberror_end(const struct liberror_state *);
 
 
 #endif

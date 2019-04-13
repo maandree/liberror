@@ -1,30 +1,33 @@
-.TH LIBERROR_SET_ERROR_ERRNO 3 2019-04-13 liberror
+.TH LIBERROR_START 3 2019-04-13 liberror
 .SH NAME
-liberror_set_error_errno \- set the current error for the thread
+liberror_start \- save and reset the thread's error state
 .SH SYNOPSIS
 .nf
 #include <liberror.h>
 
-void liberror_set_error_errno(const char \fIdescription\fP[256], const char \fIsource\fP[64], int \fIcode\fP);
+void liberror_start(struct liberror_state *\fIstate\fP);
 .fi
 .PP
 Link with
 .IR \-lerror .
 .SH DESCRIPTION
 The
-.BR liberror_set_error_errno ()
-function is equivalent to calling
-.nf
-
-	liberror_set_error(description, source, \(dqerrno\(dq, (long long int)code)
-.fi
+.BR liberror_start ()
+function saves the thread-local
+.B liberror
+variables to
+.I state
+as well as the value of
+.IR errno ,
+and resets these variables.
+.PP
+Asynchronously called functions such as single
+handlers shall call this function the first thing
+they do.
 .SH RETURN VALUE
 None.
 .SH ERRORS
-Errors will be marked in the new error.
-.I errno
-will never be changed. Failure to create the error is
-impossible.
+None.
 .SH EXAMPLES
 None.
 .SH APPLICATION USAGE
@@ -47,4 +50,4 @@ None.
 .BR liberror_reset_error (3),
 .BR liberror_save_backtrace (3),
 .BR liberror_set_error (3),
-.BR liberror_start (3)
+.BR liberror_set_error_errno (3)

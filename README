@@ -31,3 +31,9 @@ The important functions are:
 		its backtrace if liberror-backtrace is also
 		linked, the errors cause, and optionally remove
 		the error for the calling thread.
+
+	liberror_start
+		Shall be called when entering a signal handler
+
+	liberror_end
+		Shall be called when a signal handler exits

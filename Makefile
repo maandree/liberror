@@ -19,6 +19,7 @@ HDR =\
 
 OBJ =\
 	copy_error.o\
+	end.o\
 	free_error.o\
 	get_error.o\
 	internal.o\
@@ -27,10 +28,12 @@ OBJ =\
 	reset_error.o\
 	save_backtrace.o\
 	set_error.o\
-	set_error_errno.o
+	set_error_errno.o\
+	start.o
 
 MAN3 =\
 	liberror_copy_error.3\
+	liberror_end.3\
 	liberror_free_error.3\
 	liberror_get_error.3\
 	liberror_print_bactrace.3\
@@ -38,7 +41,8 @@ MAN3 =\
 	liberror_reset_error.3\
 	liberror_save_backtrace.3\
 	liberror_set_error.3\
-	liberror_set_error_errno.3
+	liberror_set_error_errno.3\
+	liberror_start.3
 
 MAN7 =\
 	liberror.7

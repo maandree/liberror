@@ -55,6 +55,12 @@ backtrace if the
 .B liberror-backtrace
 library is also linked, the errors cause, and optionally
 remove the error for the calling thread.
+.TP
+.BR liberror_start (3)
+Shall be called when entering a signal handler.
+.TP
+.BR liberror_end (3)
+Shall be called when a signal handler exits.
 .SH ERRORS
 None.
 .SH EXAMPLES
@@ -70,6 +76,7 @@ None.
 .SH SEE ALSO
 .BR liberror.h (0),
 .BR liberror_copy_error (3),
+.BR liberror_end (3),
 .BR liberror_free_error (3),
 .BR liberror_get_error (3),
 .BR liberror_print_bactrace (3),
@@ -77,4 +84,5 @@ None.
 .BR liberror_reset_error (3),
 .BR liberror_save_backtrace (3),
 .BR liberror_set_error (3),
-.BR liberror_set_error_errno (3)
+.BR liberror_set_error_errno (3),
+.BR liberror_start (3)
