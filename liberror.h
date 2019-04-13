@@ -17,9 +17,26 @@ struct liberror_backtrace;
  * `union liberror_details` that is used
  */
 enum liberror_details_type {
+	/**
+	 * No details
+	 */
 	LIBERROR_DETAILS_NONE,
+
+	/**
+	 * User-specific details
+	 */
 	LIBERROR_DETAILS_USER,
+
+	/**
+	 * Details for function that operates
+	 * on a single file
+	 */
 	LIBERROR_DETAILS_ONE_FILE,
+
+	/**
+	 * Details for function that operates
+	 * on two files
+	 */
 	LIBERROR_DETAILS_TWO_FILES
 };
 
@@ -31,10 +48,39 @@ union liberror_details {
 	 * For `LIBERROR_DETAILS_USER`
 	 */
 	struct {
+		/**
+		 * The library that defines the data
+		 */
 		const char *library;
+
+		/**
+		 * The data for the details
+		 */
 		void *data;
+
+		/**
+		 * Function that is used to deallocate `.data`
+		 * 
+		 * @param  data  The pointer `.data`
+		 */
 		void (*free_data)(void *);
+
+		/**
+		 * Function that is used to copy `.data`
+		 * 
+		 * @param   data  The pointer `.data`
+		 * @return        Copy of `data`, `NULL` on failure
+		 */
 		void *(*copy_data)(void *);
+
+		/**
+		 * Function that is used to print `.data`
+		 * 
+		 * @param  data    The pointer `.data`, may be `NULL`
+		 * @param  fp      File to print the details to, may not be `NULL`
+		 * @param  prefix  Text to print at the beginning of each line,
+		 *                 may not be `NULL`
+		 */
 		void (*print_data)(void *, FILE *, const char *);
 	} user;
 
@@ -42,8 +88,24 @@ union liberror_details {
 	 * For `LIBERROR_DETAILS_ONE_FILE`
 	 */
 	struct {
+		/**
+		 * The specified file descriptor,
+		 * negative if none
+		 */
 		int fd;
+
+		/**
+		 * The filename or other string that
+		 * identifies the file, `NULL` if
+		 * none
+		 */
 		char *name;
+
+		/**
+		 * Description of the file's role in the
+		 * function call, for example "Directory"
+		 * for the mkdir(3) function
+		 */
 		const char *role;
 	} one_file;
 
@@ -51,11 +113,44 @@ union liberror_details {
 	 * For `LIBERROR_DETAILS_TWO_FILES`
 	 */
 	struct {
+		/**
+		 * The first specified file descriptor,
+		 * negative if none
+		 */
 		int fd1;
+
+		/**
+		 * The second specified file descriptor,
+		 * negative if none
+		 */
 		int fd2;
+
+		/**
+		 * The filename or other string that
+		 * identifies the first file, `NULL` if
+		 * none
+		 */
 		char *name1;
+
+		/**
+		 * The filename or other string that
+		 * identifies the second file, `NULL`
+		 * if none
+		 */
 		char *name2;
+
+		/**
+		 * Description of the role of the first
+		 * file in the function call, for example
+		 * "Target" for the symlink(3) function
+		 */
 		const char *role1;
+
+		/**
+		 * Description of the role of the first
+		 * file in the function call, for example
+		 * "Link" for the symlink(3) function
+		 */
 		const char *role2;
 	} two_files;
 };
