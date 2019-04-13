@@ -220,6 +220,8 @@ struct liberror_error {
 
 /**
  * Saved error state for a thread
+ * 
+ * This structure shall be regardes as opaque
  */
 struct liberror_state {
 	/**

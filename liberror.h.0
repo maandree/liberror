@@ -1,0 +1,323 @@
+.TH LIBERROR.H 0 2019-04-13 liberror
+.SH NAME
+liberror.h \- single interface for custom and standard errors
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+struct liberror_backtrace;
+
+enum liberror_details_type {
+	LIBERROR_DETAILS_NONE,
+	LIBERROR_DETAILS_USER,
+	LIBERROR_DETAILS_ONE_FILE,
+	LIBERROR_DETAILS_TWO_FILES
+};
+
+union liberror_details {
+	struct {
+		const char *\fIlibrary\fP;
+		void *\fIdata\fP;
+		void (*\fIfree_data\fP)(void *);
+		void *(*\fIcopy_data\fP)(void *);
+		void (*\fIprint_data\fP)(void *, FILE *, const char *);
+	} \fIuser\fP;
+
+	struct {
+		int \fIfd\fP;
+		char *\fIname\fP;
+		const char *\fIrole\fP;
+	} \fIone_file\fP;
+
+	struct {
+		int \fIfd1\fP, \fIfd2\fP;
+		char *\fIname1\fP, *\fIname2\fP;
+		const char *\fIrole1\fP, *\fIrole2\fP;
+	} \fItwo_files\fP;
+};
+
+struct liberror_error {
+	struct liberror_backtrace *\fIbacktrace\fP;
+	char \fIdescription\fP[256];
+	char \fIsource\fP[64];
+	char \fIcode_group\fP[64];
+	long long int \fIcode\fP;
+	struct liberror_error *\fIcause\fP;
+	int \fIfailed_to_allocate_cause\fP;
+	int \fIdynamically_allocated\fP;
+	enum liberror_details_type \fIdetails_type\fP;
+	union liberror_details \fIdetails\fP;
+};
+
+struct liberror_state { /* fields omitted */ };
+
+struct liberror_error *liberror_get_error(void);
+struct liberror_error *liberror_copy_error(struct liberror_error *);
+void liberror_free_error(struct liberror_error *);
+void liberror_reset_error(void);
+void liberror_print_backtrace(struct liberror_error *, FILE *, const char *);
+int liberror_save_backtrace(struct liberror_error *);
+void liberror_set_error(const char[256], const char[64], const char[64], long long int);
+void liberror_set_error_errno(const char[256], const char[64], int);
+void liberror_print_error(struct liberror_error *, FILE *, int, const char *);
+void liberror_start(struct liberror_state *);
+void liberror_end(const struct liberror_state *);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.B liberror.h
+header defines one transparent structure:
+.BR "struct liberror_error" ,
+its fields are:
+.TP
+.I backtrace
+The backtrace for the error.
+.TP
+.I description
+Textual description of the error;
+empty if missing.
+.TP
+.I source
+The function in which the error occurred;
+empty if unknown.
+.TP
+.I code_group
+A string that specifies which group of
+error codes are used.
+.B \(dqerrno\(dq
+for
+.I errno
+values,
+.B \(dqaddrinfo\(dq
+for errors codes used by the
+.BR getaddrinfo (3)
+function, and library or application
+name of custom error codes.
+.TP
+.I code
+The error code.
+.TP
+.I cause
+The error which caused the error,
+.I NULL
+if none of if the process could not
+allocate enough memory to store it.
+.TP
+.I failed_to_allocate_cause
+Whether the
+.I cause
+field was set to
+.I NULL
+because the enough memory cause
+not be allocated for it.
+.TP
+.I dynamically_allocated
+Whether the error is dynamically
+allocated rather than statically
+allocated. This is used by the
+.BR liberror_free_error (3)
+to determine whether the pointer
+to the error shall be deallocated.
+.TP
+.I details_type
+Used to determine which structure in the
+.I details
+field is used. By default, this is set to
+.I LIBERROR_DETAILS_NONE
+when a new error is assigned to a thread,
+and the function that sets the error must
+get the error it created as set this
+information manually.
+.TP
+.I details
+Extended information about the error.
+.PP
+The
+.B liberror.h
+header defines two opaque structures:
+.TP
+.B struct liberror_backtrace
+Backtrace information for an error.
+This is defined as an incomplete type,
+it is a flat structure of variable size.
+.TP
+.B struct liberror_state
+Stored error state for a thread. This
+is defined as a complete type but should
+be regardes as opaque.
+.PP
+The
+.B liberror.h
+header defines one enumerated type:
+.BR "enum liberror_details_type" ,
+it is used to specify which structure in
+.BR "union liberror_details" .
+Its values are:
+.TP
+.I LIBERROR_DETAILS_NONE
+None is used. There is no extended information.
+.TP
+.I LIBERROR_DETAILS_USER
+.I user
+is used. There is library- or application-defined
+extended information.
+.TP
+.I LIBERROR_DETAILS_ONE_FILE
+.I one_file
+is used. There is extended information about one
+file or file descriptor.
+.TP
+.I LIBERROR_DETAILS_TWO_FILES
+.I two_files
+is used. There is extended information about two
+files or file descriptors.
+.PP
+The
+.B liberror.h
+header defines one union:
+.BR "union liberror_details" ,
+it is used for extended error information. Its
+member structures are:
+.TP
+.I user
+Information defined by a library or the application.
+The field
+.I library
+shall be set to a statically allocated string that
+names the library that defines the informations.
+If the application defines the information, the
+application can choose freely how this field shall
+be set as it will not affect other software. The
+information it self shall be stored in the field
+.IR data ,
+and the functions stored in the fields,
+.IR free_data ,
+.IR copy_data ,
+and
+.IR print_data ,
+shall deallocate, copy, and print the extended
+information, respective, the value of the
+.I data
+field is input in these functions' first parameter.
+The second parameter of the
+.IR print_data
+function will be the file the information shall
+be printed to and the third parameter will be a
+string that shall be printed at the beginning of
+each printed line. Neither the second nor the
+third parameter will ever be
+.IR NULL .
+.TP
+.I one_file
+Information about one file. The value of the
+.I fd
+field shall either be the file descriptor number
+of the file given as input to the function in
+which the error occured, or a negative value if
+none. The value of the
+.I name
+field shall either be a dynamically allocated
+string containing the file name or any other
+identifying string, or
+.I NULL
+if none or if enough the string could not be
+allocated. The value of the
+.I role
+string shall be a statically allocated string
+containing the file's role in the function call,
+for example \(dqDirectory\(dq for the
+.BR mkdir (3)
+function.
+.TP
+.I two_files
+Information about two files. This structure is
+similar to that of
+.IR one_file ,
+with the difference that
+.I two_files
+have two copies of each field in
+.IR one_file :
+one with the
+.B 1
+suffix for the first file parameter and one
+with the
+.B 2
+suffix for the second file parameter.
+.PP
+The
+.B liberror.h
+header defines the following functions:
+.TP
+.BR liberror_get_error (3)
+Get the current error, if any, for the calling thread.
+.TP
+.BR liberror_copy_error (3)
+Create a copy if an error.
+.TP
+.BR liberror_free_error (3)
+Delete a copy if an error.
+.TP
+.BR liberror_reset_error (3)
+Deallocate the calling thread's current error, if any,
+and mark that the thread does not have any error.
+.TP
+.BR liberror_print_backtrace (3)
+Print the backtrace for an error. Please see its man
+page for more information.
+.TP
+.BR liberror_save_backtrace (3)
+Set the backtrace for an error or the thread's next
+error. Please see its man page for more information.
+.TP
+.BR liberror_set_error (3)
+Set the error for the calling thread.
+.TP
+.BR liberror_set_error_errno (3)
+Wrapper for
+.BR liberror_set_error (3)
+for errors with
+.I errno
+values.
+.TP
+.BR liberror_print_error (3)
+Print an error, by default the calling thread's
+current error, if any, including description,
+extended information, backtrace, and cause,
+recursively. Optionally deallocate the error
+and clear the thread's error.
+.TP
+.BR liberror_start (3)
+This function shall be called at the beginning
+of signal handlers and other asynchronously
+called functions.
+.TP
+.BR liberror_end (3)
+This function shall be called at the end
+of signal handlers and other asynchronously
+called functions.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror_copy_error (3),
+.BR liberror_end (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3),
+.BR liberror_start (3)
