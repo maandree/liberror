@@ -1,0 +1,80 @@
+.TH LIBERROR 7 2019-04-13 liberror
+.SH NAME
+liberror \- single interface for custom and standard errors
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.B liberror
+library provides a single interface for error handling.
+Specifically this is intended for cases where some
+errors are
+.I errno
+errors or other
+.B libc
+errors and there are library-specific, maybe for
+multiple libraries, errors.
+.PP
+The errors are thread-local, support error description,
+error source string (which function failed), and error
+code with error code group (e.g. \(dqerrno\(dq,
+\(dqaddrinfo\(dq or a library name), as well as cause
+chains, extended details, and if linked together with
+.BR liberror-backtrace ,
+backtraces.
+.PP
+The important functions are:
+.TP
+.BR liberror_get_error (3)
+Get error for the calling thread.
+.TP
+.BR liberror_set_error (3)
+Set error for the calling thread.
+.TP
+.BR liberror_set_error_errno (3)
+Wrapper for the
+.BR liberror_set_error (3)
+function for
+.I errno
+errors.
+.TP
+.BR liberror_reset_error (3)
+Remove error for the calling thread, needed because the
+.BR liberror_set_error (3)
+function otherwise stores the error as the cause of the
+new error.
+.TP
+.BR liberror_print_error (3)
+Print the error for the calling thread, include its
+backtrace if the
+.B liberror-backtrace
+library is also linked, the errors cause, and optionally
+remove the error for the calling thread.
+.SH ERRORS
+None.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_print_bactrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3)
