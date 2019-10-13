@@ -266,7 +266,7 @@ struct liberror_error *liberror_get_error(void);
 struct liberror_error *liberror_copy_error(struct liberror_error *);
 
 /**
- * Deallocate and error and the error stored as
+ * Deallocate the error and the error stored as
  * its cause (recursively)
  * 
  * @param  error  The error to deallocate
