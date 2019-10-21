@@ -22,14 +22,14 @@ is
 .IR NULL ,
 the backtrace will assigned to the next error that is
 assigned to the thread. The
-.IR liberror_set_error (3)
+.BR liberror_set_error (3)
 function calls this function, so there is no need for the
 user to call this function, however, calling this function
 before or after (preferably before for better performance)
 call the
-.IR liberror_set_error (3)
+.BR liberror_set_error (3)
 function or any helper function that calls the
-.IR liberror_set_error (3)
+.BR liberror_set_error (3)
 function will produce a cleaner backtrace.
 .PP
 .B liberror
