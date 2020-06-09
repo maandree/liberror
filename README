@@ -13,18 +13,25 @@ together with liberror-backtrace, backtraces.
 The important functions are:
 
 	liberror_get_error
-		Get error for the calling thread
+		Get error for the calling thread.
 
 	liberror_set_error
-		Set error for the calling thread
+		Set error for the calling thread.
 
 	liberror_set_error_errno
-		Wrapper for liberror_set_error for errno errors
+		Wrapper for liberror_set_error for errno errors.
+
+	liberror_set_error_existing
+		Set error for the calling thread to a saved error.
+
+	liberror_pop_error
+		Set error for the calling thread to the
+		current error's cause.
 
 	liberror_reset_error
 		Remove error for the calling thread, needed
 		because `liberror_set_error` otherwise stores
-		the error as the cause of the new error
+		the error as the cause of the new error.
 
 	liberror_print_error
 		Print the error for the calling thread, include
@@ -33,7 +40,7 @@ The important functions are:
 		the error for the calling thread.
 
 	liberror_start
-		Shall be called when entering a signal handler
+		Shall be called when entering a signal handler.
 
 	liberror_end
-		Shall be called when a signal handler exits
+		Shall be called when a signal handler exits.

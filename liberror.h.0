@@ -1,4 +1,4 @@
-.TH LIBERROR.H 0 2019-04-13 liberror
+.TH LIBERROR.H 0 2020-06-09 liberror
 .SH NAME
 liberror.h \- single interface for custom and standard errors
 .SH SYNOPSIS
@@ -59,6 +59,8 @@ void liberror_print_backtrace(struct liberror_error *, FILE *, const char *);
 int liberror_save_backtrace(struct liberror_error *);
 void liberror_set_error(const char[256], const char[64], const char[64], long long int);
 void liberror_set_error_errno(const char[256], const char[64], int);
+void liberror_set_error_existing(struct liberror_error *);
+void liberror_pop_error(void);
 void liberror_print_error(struct liberror_error *, FILE *, int, const char *);
 void liberror_start(struct liberror_state *);
 void liberror_end(const struct liberror_state *);
@@ -281,6 +283,13 @@ Wrapper for
 for errors with
 .I errno
 values.
+.TP
+.BR liberror_set_error_existing (3)
+Set error for the calling thread to a saved error.
+.TP
+.BR liberror_pop_error (3)
+Set error for the calling thread to the current
+error's cause.
 .TP
 .BR liberror_print_error (3)
 Print an error, by default the calling thread's
