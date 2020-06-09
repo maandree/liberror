@@ -1,0 +1,61 @@
+.TH LIBERROR_SET_ERROR_EXISTING 3 2020-06-09 liberror
+.SH NAME
+liberror_set_error_existing \- set the current error for the thread to a saved error
+.SH SYNOPSIS
+.nf
+#include <liberror.h>
+
+void liberror_set_error_existing(struct liberror_error *\fIerror\fP);
+.fi
+.PP
+Link with
+.IR \-lerror .
+.SH DESCRIPTION
+The
+.BR liberror_set_error_existing ()
+function assigns the error specified in the
+.I error
+parameter to the thread. If
+.I error
+is
+.BR NULL ,
+the current error will be removed without being
+replaces.
+.PP
+The pointer for the specified error will become
+invalid. The pointer for the specified error
+.B must not
+be the pointer returned by the
+.BR liberror_get_error (3)
+function.
+.SH RETURN VALUE
+None.
+.SH ERRORS
+Failure to set the error is impossible.
+.I errno
+will not be changed.
+.SH EXAMPLES
+None.
+.SH APPLICATION USAGE
+None.
+.SH RATIONALE
+None.
+.SH FUTURE DIRECTIONS
+None.
+.SH NOTES
+None.
+.SH SEE ALSO
+.BR liberror (7),
+.BR liberror.h (0),
+.BR liberror_copy_error (3),
+.BR liberror_end (3),
+.BR liberror_free_error (3),
+.BR liberror_get_error (3),
+.BR liberror_pop_error (3),
+.BR liberror_print_backtrace (3),
+.BR liberror_print_error (3),
+.BR liberror_reset_error (3),
+.BR liberror_save_backtrace (3),
+.BR liberror_set_error (3),
+.BR liberror_set_error_errno (3),
+.BR liberror_start (3)

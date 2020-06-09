@@ -354,6 +354,24 @@ void liberror_set_error(const char[256], const char[64], const char[64], long lo
 void liberror_set_error_errno(const char[256], const char[64], int);
 
 /**
+ * Remove the current error and, if the
+ * specified error is non-`NULL`, replace it
+ * with the the specified error
+ * 
+ * @param  error  The error to set as the current error, must not
+ *                be the pointer returned by liberror_get_error()
+ *                for any thread, including the current thread,
+ *                the function will copy and deallocate this error
+ */
+void liberror_set_error_existing(struct liberror_error *);
+
+/**
+ * Remove the current error and, if the error
+ * has a cause, replace it with its cause
+ */
+void liberror_pop_error(void);
+
+/**
  * The an error, its backtrace, and its
  * cause (recursively)
  * 
