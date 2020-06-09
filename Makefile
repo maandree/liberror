@@ -9,7 +9,7 @@ OS = linux
 include $(OS).mk
 
 LIB_MAJOR = 1
-LIB_MINOR = 0
+LIB_MINOR = 1
 LIB_VERSION = $(LIB_MAJOR).$(LIB_MINOR)
 
 
