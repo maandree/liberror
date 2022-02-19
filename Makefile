@@ -6,7 +6,9 @@ include $(CONFIGFILE)
 OS = linux
 # linux = Linux
 # macos = Mac OS
-include $(OS).mk
+# windows = Windows
+include mk/$(OS).mk
+
 
 LIB_MAJOR = 1
 LIB_MINOR = 1
@@ -84,6 +86,7 @@ install: liberror.a liberror.$(LIBEXT)
 	mkdir -p -- "$(DESTDIR)$(MANPREFIX)/man7"
 	cp -- liberror.a "$(DESTDIR)$(PREFIX)/lib"
 	cp -- liberror.$(LIBEXT) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBMINOREXT)"
+	$(FIX_INSTALL_NAME) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBMINOREXT)"
 	ln -sf -- liberror.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBMAJOREXT)"
 	ln -sf -- liberror.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/liberror.$(LIBEXT)"
 	cp -- liberror.h "$(DESTDIR)$(PREFIX)/include"
