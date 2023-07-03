@@ -13,7 +13,7 @@ Link with
 .SH DESCRIPTION
 The
 .BR liberror_get_error ()
-function returns a pointer to the threads current
+function returns a pointer to the thread's current
 error. If the thread does not have an error assigned,
 .I NULL
 is returned.
@@ -26,7 +26,7 @@ The
 .BR liberror_get_error ()
 returns the error assigned to the thread, or
 .I NULL
-if none is assigned to the threa. Failure is impossible.
+if none is assigned to the thread. Failure is impossible.
 .PP
 Note, this contents of this error will change when a new
 error is assigned to the thread.
