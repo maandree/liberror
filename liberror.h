@@ -13,7 +13,7 @@
 struct liberror_backtrace;
 
 /**
- * Value that specifies which feild in a
+ * Value that specifies which field in a
  * `union liberror_details` that is used
  */
 enum liberror_details_type {
@@ -160,7 +160,7 @@ union liberror_details {
  */
 struct liberror_error {
 	/**
-	 * Backtrace for the error, `NULL` if the it could
+	 * Backtrace for the error, `NULL` if it could
 	 * not be allocated or if the program is not linked
 	 * with `-lerror-backtrace`
 	 */

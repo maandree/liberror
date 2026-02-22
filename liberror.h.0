@@ -1,4 +1,4 @@
-.TH LIBERROR.H 0 2020-06-09 liberror
+.TH LIBERROR.H 0 LIBERROR
 .SH NAME
 liberror.h \- single interface for custom and standard errors
 .SH SYNOPSIS
