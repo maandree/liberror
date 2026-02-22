@@ -251,6 +251,9 @@ struct liberror_state {
  * 
  * @return  The current error, `NULL` if none
  */
+#if defined(__GNUC__)
+__attribute__((__pure__))
+#endif
 struct liberror_error *liberror_get_error(void);
 
 /**

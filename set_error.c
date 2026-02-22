@@ -33,7 +33,7 @@ liberror_set_error(const char description[256], const char source[64], const cha
 	} else if (!strcmp(code_group, "h_errno")) {
 		if (code >= (long long int)INT_MIN && code <= (long long int)INT_MAX) {
 			saved_errno = errno;
-			errstr = hstrerror(code);
+			errstr = hstrerror((int)code);
 			if (errstr)
 				strncpy(error->description, errstr, sizeof(error->description));
 			errno = saved_errno;
@@ -43,7 +43,7 @@ liberror_set_error(const char description[256], const char source[64], const cha
 			strerror_r(errno, error->description, sizeof(error->description));
 		} else if (code >= (long long int)INT_MIN && code <= (long long int)INT_MAX) {
 			saved_errno = errno;
-			errstr = gai_strerror(code);
+			errstr = gai_strerror((int)code);
 			if (errstr)
 				strncpy(error->description, errstr, sizeof(error->description));
 			errno = saved_errno;
